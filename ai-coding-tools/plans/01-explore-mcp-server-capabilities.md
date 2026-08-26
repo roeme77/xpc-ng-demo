@@ -4,23 +4,25 @@
 Understand what the MCP (Model Context Protocol) server for XCP-NG can offer in terms of API integration, automation capabilities, and integration patterns with Xen Orchestra.
 
 ## Scope
-- Use Context7 MCP server to research XCP-NG capabilities
-- Research the Context7 MCP server and its capabilities
+- Use @xen-orchestra/mcp server to query XCP-NG capabilities
+- Research the @xen-orchestra/mcp server and its capabilities
 - Document available endpoints and operations
 - Identify efficient API communication patterns
 - Test MCP server interactions with Xen Orchestra
 - Map out what infrastructure operations can be automated via MCP
+- Use Context7 (reference documentation tool) to supplement learning
 
-## Phase 1: Research XCP-NG Capabilities via Context7 MCP Server
-Use the Context7 MCP server to understand what XCP-NG can do:
+## Phase 1: Research XCP-NG Capabilities via MCP Server
+Use the @xen-orchestra/mcp server and reference documentation to understand what XCP-NG can do:
 
-- [ ] Query Context7 MCP server for XCP-NG API documentation
-- [ ] Ask about available resources (VMs, networks, storage, hosts)
-- [ ] Inquire about operational capabilities (create, modify, destroy, etc.)
+- [ ] Query @xen-orchestra/mcp server for available resources (VMs, networks, storage, hosts)
+- [ ] Use Context7 or reference docs to understand XCP-NG operational capabilities
+- [ ] Research what operations the MCP server exposes (list, query, filter)
+- [ ] Identify read-only vs. action capabilities
 - [ ] Research performance and scalability characteristics
 - [ ] Identify limitations and constraints
 - [ ] Document best practices from MCP perspective
-- [ ] Gather examples of common workflows
+- [ ] Gather examples of common queries and workflows
 
 ## Key Questions to Answer
 1. What XCP-NG operations are exposed through the MCP server?

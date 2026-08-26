@@ -69,7 +69,8 @@ Before submitting a question or task to Claude, ask yourself:
 | **ansible-lint** | Check Ansible playbook syntax and best practices |
 | **git log / git diff** | Understand code history and recent changes |
 | **Xen Orchestra API/CLI** | Query infrastructure state directly |
-| **Context7 MCP Server** | Ask about XCP-NG capabilities instead of Claude |
+| **@xen-orchestra/mcp Server** | Query infrastructure state instead of asking Claude |
+| **Context7 (Ref Docs)** | Access reference documentation for efficient research |
 | **YAML validators** | Validate Ansible playbook syntax locally |
 | **HCL validators** | Validate Terraform syntax locally |
 
@@ -96,9 +97,10 @@ Before submitting a question or task to Claude, ask yourself:
 - ❌ Don't ask Claude (query infrastructure directly)
 
 ### Scenario: "What capabilities does XCP-NG have?"
-- ✅ Use Context7 MCP server to research
+- ✅ Use @xen-orchestra/mcp server to query capabilities
+- ✅ Use Context7 (reference docs) to understand constraints
 - ✅ Check XCP-NG official documentation
-- ❌ Don't ask Claude first (use MCP server)
+- ❌ Don't ask Claude first (use MCP + reference tools)
 
 ### Scenario: "Why is this deployment failing?"
 - ✅ Run the deployment and capture error output

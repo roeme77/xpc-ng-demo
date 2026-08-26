@@ -28,11 +28,12 @@ Understand how MCP servers extend Xen Orchestra's capabilities and enable AI-ass
 
 - [MCP meets Xen Orchestra](https://xen-orchestra.com/blog/mcp-meets-xen-orchestra/)
 
-**Context7 MCP Server Testing:**
-- Learn how to set up and configure the Context7 MCP server
+**@xen-orchestra/mcp Server Setup:**
+- Learn how to set up and configure the official Xen Orchestra MCP server
 - Test efficient API communication patterns with Xen Orchestra APIs
-- Optimize request handling and response processing
+- Integrate with AI assistants (Claude Desktop, etc.)
 - Debug and monitor MCP server interactions in real-time
+- Use Context7 (reference documentation tool) for efficient knowledge access
 
 ### 2. Infrastructure as Code Fundamentals
 

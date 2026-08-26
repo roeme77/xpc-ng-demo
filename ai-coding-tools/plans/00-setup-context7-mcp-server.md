@@ -1,7 +1,7 @@
-# Plan: Setup Context7 MCP Server
+# Plan: Setup @xen-orchestra/mcp Server
 
 ## Objective
-Install, configure, and validate the Context7 MCP server for integration with Xen Orchestra, enabling AI-assisted infrastructure queries and automation.
+Install, configure, and validate the official Xen Orchestra MCP server (`@xen-orchestra/mcp`) for integration with your XCP-NG infrastructure, enabling AI-assisted infrastructure queries and automation.
 
 ## Prerequisites
 - XCP-NG infrastructure running ✅
@@ -16,29 +16,32 @@ Install, configure, and validate the Context7 MCP server for integration with Xe
 - Document setup for reproducibility
 
 ## Key Questions to Answer
-1. What are the system requirements for Context7 MCP server?
-2. How do you install and configure Context7?
+1. What are the system requirements for @xen-orchestra/mcp?
+2. How do you install and configure @xen-orchestra/mcp?
 3. What credentials/permissions does it need for Xen Orchestra?
 4. How do you verify the connection is working?
 5. What are the security considerations?
+6. How can we integrate it with Claude Desktop or other AI assistants?
 
 ## Implementation Steps
 
 ### Research & Planning
-- [ ] Websearch for Context7 MCP server documentation
-- [ ] Check official MCP specification (https://spec.modelcontextprotocol.io/)
-- [ ] Review any README references or external documentation
+- [ ] Review official Xen Orchestra MCP documentation
+- [ ] Check npm package: `@xen-orchestra/mcp`
+- [ ] Review MCP specification (https://spec.modelcontextprotocol.io/)
+- [ ] Check integration guides from Xen Orchestra blog
 - [ ] Document findings and installation approach
 
 ### Installation
-- [ ] Install Context7 MCP server (method: TBD after research)
-- [ ] Configure with Xen Orchestra credentials
-- [ ] Set up any required authentication/authorization
+- [ ] Install @xen-orchestra/mcp package (via npm)
+- [ ] Configure with Xen Orchestra credentials (hostname, username, password)
+- [ ] Set up integration with Claude Desktop or chosen AI assistant
 - [ ] Configure logging and error handling
 
 ### Validation
 - [ ] Test basic connectivity to Xen Orchestra via MCP
-- [ ] Query for available resources (VMs, hosts, networks)
+- [ ] Query for available resources (VMs, hosts, networks, pools)
+- [ ] Test with Claude or chosen AI tool
 - [ ] Verify response format and data accuracy
 - [ ] Document any quirks or limitations found
 
