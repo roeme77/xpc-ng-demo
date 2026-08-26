@@ -1,7 +1,8 @@
-# Plan: Setup @xen-orchestra/mcp Server
+# Plan: Setup @xen-orchestra/mcp Server & Leverage find-docs Skill
 
 ## Objective
-Install, configure, and validate the official Xen Orchestra MCP server (`@xen-orchestra/mcp`) for integration with your XCP-NG infrastructure, enabling AI-assisted infrastructure queries and automation.
+1. Install and validate the find-docs skill for efficient documentation lookup (completed ✅)
+2. Install, configure, and validate the official Xen Orchestra MCP server (`@xen-orchestra/mcp`) for integration with your XCP-NG infrastructure, enabling AI-assisted infrastructure queries
 
 ## Prerequisites
 - XCP-NG infrastructure running ✅
@@ -25,11 +26,17 @@ Install, configure, and validate the official Xen Orchestra MCP server (`@xen-or
 
 ## Implementation Steps
 
+### Setup find-docs Skill
+- [x] Install find-docs skill via npx ctx7 setup
+- [x] Test skill with Terraform and Xen Orchestra queries
+- [x] Verify it pulls current documentation
+- [x] Add to token-optimization process (use FIRST before asking Claude)
+
 ### Research & Planning
-- [ ] Review official Xen Orchestra MCP documentation
+- [ ] Use /find-docs skill to research MCP documentation
 - [ ] Check npm package: `@xen-orchestra/mcp`
 - [ ] Review MCP specification (https://spec.modelcontextprotocol.io/)
-- [ ] Check integration guides from Xen Orchestra blog
+- [ ] Use /find-docs to research Xen Orchestra integration
 - [ ] Document findings and installation approach
 
 ### Installation

@@ -17,12 +17,13 @@ Before submitting a question or task to Claude, ask yourself:
   - Real-time information not in training data
 - **No** → Continue to #2
 
-### 2. Do you have reference documents for this?
-- **Yes** → Use **RAG** (Retrieval-Augmented Generation)
-  - XCP-NG documentation files
-  - Terraform/Ansible official docs stored locally
-  - Your own runbooks and deployment guides
-  - Previous plan documents or findings
+### 2. Do you need to look up current documentation?
+- **Yes** → Use **/find-docs skill** (leverage this FIRST)
+  - Query Terraform documentation: `/find-docs Terraform "your question"`
+  - Query Ansible documentation: `/find-docs Ansible "your question"`
+  - Query XCP-NG/Xen Orchestra: `/find-docs "Xen Orchestra" "your question"`
+  - Gets current docs without token cost
+  - If skill not available, check local reference documents
 - **No** → Continue to #3
 
 ### 3. Can a script/command gather the data you need?
@@ -64,31 +65,33 @@ Before submitting a question or task to Claude, ask yourself:
 
 | Tool | Use Case |
 |------|----------|
+| **/find-docs skill** | **Query current documentation for any library (Terraform, Ansible, XCP-NG, etc.) — use this FIRST before asking Claude** |
 | **terraform validate** | Check HCL syntax before asking Claude to review |
 | **terraform plan** | See what changes will happen before analysis |
 | **ansible-lint** | Check Ansible playbook syntax and best practices |
 | **git log / git diff** | Understand code history and recent changes |
 | **Xen Orchestra API/CLI** | Query infrastructure state directly |
 | **@xen-orchestra/mcp Server** | Query infrastructure state instead of asking Claude |
-| **Context7 (Ref Docs)** | Access reference documentation for efficient research |
 | **YAML validators** | Validate Ansible playbook syntax locally |
 | **HCL validators** | Validate Terraform syntax locally |
 
 ## Common Scenarios
 
 ### Scenario: "How do I use Terraform with XCP-NG?"
-- ✅ Websearch for latest Terraform provider docs
+- ✅ **Use /find-docs skill:** `/find-docs "Xen Orchestra" "Terraform provider"`
 - ✅ Check README references (Xen Orchestra blog series)
-- ❌ Don't ask Claude to explain (you have docs)
+- ❌ Don't ask Claude to explain (you have docs via skill)
 
 ### Scenario: "Is my Terraform config valid?"
 - ✅ Run `terraform validate`
 - ✅ Run `terraform plan` to see what changes
+- ✅ Use `/find-docs` for syntax questions
 - ✅ Ask Claude only if validation fails (provide error output)
 
 ### Scenario: "Does my Ansible playbook have issues?"
 - ✅ Run `ansible-lint` on the playbook
 - ✅ Check YAML syntax locally
+- ✅ Use `/find-docs` for Ansible syntax/best practices
 - ✅ Ask Claude only if lint finds issues
 
 ### Scenario: "What VMs do we have in XCP-NG?"
@@ -97,10 +100,10 @@ Before submitting a question or task to Claude, ask yourself:
 - ❌ Don't ask Claude (query infrastructure directly)
 
 ### Scenario: "What capabilities does XCP-NG have?"
-- ✅ Use @xen-orchestra/mcp server to query capabilities
-- ✅ Use Context7 (reference docs) to understand constraints
+- ✅ Use `/find-docs` skill: `/find-docs "Xen Orchestra" "your question"`
+- ✅ Use @xen-orchestra/mcp server to query live infrastructure
 - ✅ Check XCP-NG official documentation
-- ❌ Don't ask Claude first (use MCP + reference tools)
+- ❌ Don't ask Claude first (use skill + MCP tools)
 
 ### Scenario: "Why is this deployment failing?"
 - ✅ Run the deployment and capture error output
