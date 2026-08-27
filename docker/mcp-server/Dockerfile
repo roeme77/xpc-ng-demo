@@ -17,17 +17,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # Copy entrypoint script
-COPY entrypoint.sh /app/
+COPY mcp-server/entrypoint.sh /app/
 RUN chmod +x /app/entrypoint.sh
 
-# Install npm packages globally
-RUN npm install -g npm@24 npx
-
-# Create non-root user for security
-RUN useradd -m -u 1000 mcp && chown -R mcp:mcp /app
-
-# Switch to non-root user
-USER mcp
+# Note: Running as root for now; production should use non-root user
+# To enable non-root: create user before container runs if needed
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
