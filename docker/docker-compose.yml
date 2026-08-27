@@ -58,10 +58,6 @@ services:
         max-size: "10m"
         max-file: "3"
 
-    # Network (bridge is default, compatible with both Docker and Podman)
-    networks:
-      - mcp-network
-
-networks:
-  mcp-network:
-    driver: bridge
+    # Network: Use host network to reach XCP-NG on local network
+    # For isolated network, use bridge and set XO_HOST to container-accessible IP
+    network_mode: "host"
