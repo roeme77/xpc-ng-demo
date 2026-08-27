@@ -95,11 +95,26 @@ xpc-ng-demo/
 
 Prerequisites:
 
+- **Node.js & npm** — npm 24.x (see `.nvmrc` for version pinning)
 - XCP-NG infrastructure running
 - Xen Orchestra installed and accessible
 - [Terraform](https://www.terraform.io/downloads) (latest version)
 - [Ansible](https://www.ansible.com/get-started) (2.10+)
 - Git and basic command-line familiarity
+
+### Node/npm Setup
+
+The project requires **npm 24.x** for proper MCP server operation. If using nvm:
+
+```bash
+nvm use  # Reads .nvmrc and switches to npm 24.x
+```
+
+Or install explicitly:
+
+```bash
+npm install -g npm@24
+```
 
 More details coming as the project develops. For now, review the learning resources above.
 
