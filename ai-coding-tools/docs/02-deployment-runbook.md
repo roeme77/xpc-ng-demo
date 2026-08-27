@@ -1,6 +1,8 @@
 # MCP Server Deployment Runbook
 
-**Quick Reference for deploying containerized MCP server with Docker or Podman**
+**Tested and verified deployment instructions for Xen Orchestra MCP server container**
+
+**Status:** ✅ Fully tested with Podman and Xen Orchestra (10.0.4.20:80)
 
 ## Table of Contents
 
@@ -74,14 +76,14 @@ docker images | grep mcp-server
 ### 4. Start Container
 
 ```bash
-# Start with docker-compose
+# Start with docker-compose (uses host network for XO access)
 docker-compose up -d
 
 # Or manually:
 docker run -d \
   --name xpc-ng-mcp-server \
   --restart unless-stopped \
-  -p 3000:3000 \
+  --net=host \
   --env-file .env \
   -v $(pwd)/config:/config:ro \
   -v $(pwd)/logs:/app/logs \
@@ -94,11 +96,16 @@ docker run -d \
 # Check container status
 docker-compose ps
 
-# Check logs
+# Check logs (should show connection to XO successful)
 docker-compose logs -f mcp-server
 
-# Test health
-curl http://localhost:3000/health
+# Expected output:
+# ✓ Credentials validated
+# ✓ Successfully connected to Xen Orchestra at http://10.0.4.20:80
+# MCP Server listening on port 3000
+
+# Test health from within container
+docker exec xpc-ng-mcp-server curl -s http://localhost:3000/health | jq .
 ```
 
 ### 6. Stop/Restart
@@ -156,14 +163,14 @@ podman images | grep mcp-server
 ### 4. Start Container
 
 ```bash
-# Start with podman-compose
+# Start with podman-compose (uses host network for XO access)
 podman-compose up -d
 
 # Or manually:
 podman run -d \
   --name xpc-ng-mcp-server \
   --restart always \
-  -p 3000:3000 \
+  --net=host \
   --env-file .env \
   -v $(pwd)/config:/config:ro \
   -v $(pwd)/logs:/app/logs \
@@ -178,13 +185,18 @@ podman-compose ps
 # or
 podman ps | grep mcp-server
 
-# Check logs
+# Check logs (should show XO connection successful)
 podman-compose logs -f mcp-server
 # or
 podman logs -f xpc-ng-mcp-server
 
-# Test health
-curl http://localhost:3000/health
+# Expected output:
+# ✓ Credentials validated
+# ✓ Successfully connected to Xen Orchestra at http://10.0.4.20:80
+# MCP Server listening on port 3000
+
+# Test health from within container
+podman exec xpc-ng-mcp-server curl -s http://localhost:3000/health | jq .
 ```
 
 ### 6. Stop/Restart
@@ -210,41 +222,76 @@ podman rm -f xpc-ng-mcp-server
 
 ## Verification
 
-### Health Check
+### Startup Verification (Tested ✓)
+
+After starting the container, verify these steps in the logs:
 
 ```bash
-# Quick health test
-curl -v http://localhost:3000/health
+# View container logs
+podman-compose logs mcp-server
+
+# Expected log sequence:
+# ✓ Starting Xen Orchestra MCP Server...
+# ✓ Validating Xen Orchestra credentials...
+# ✓ Credentials validated
+#   XO_HOST: 10.0.4.20
+#   XO_PORT: 80
+#   XO_USER: admin@admin.net
+#   XO_AUTH: Password (or Token)
+# ✓ Testing connectivity to Xen Orchestra...
+# ✓ Successfully connected to Xen Orchestra at http://10.0.4.20:80
+# ✓ Creating MCP configuration...
+# ✓ Starting Node.js MCP server process...
+# ✓ MCP Server listening on port 3000
+# [timestamp] Connected to Xen Orchestra: 10.0.4.20:80
+# [timestamp] Try: curl http://localhost:3000/health
+```
+
+### API Endpoint Health Check
+
+```bash
+# Test health endpoint (from within container)
+podman exec xpc-ng-mcp-server curl -s http://localhost:3000/health | jq .
 
 # Expected response:
-# HTTP/1.1 200 OK
+{
+  "status": "ok",
+  "timestamp": "2026-08-27T20:27:07.437Z",
+  "xo_host": "10.0.4.20",
+  "xo_port": 80
+}
+```
+
+### Test All Endpoints
+
+```bash
+# Health endpoint
+podman exec xpc-ng-mcp-server curl -s http://localhost:3000/health | jq .
+
+# Status endpoint
+podman exec xpc-ng-mcp-server curl -s http://localhost:3000/status | jq .
+
+# Info endpoint (capabilities)
+podman exec xpc-ng-mcp-server curl -s http://localhost:3000/info | jq .
 ```
 
 ### Full Verification Checklist
 
 ```bash
 # 1. Container running?
-docker ps | grep mcp-server
-# or
 podman ps | grep mcp-server
 
-# 2. Logs clean?
-docker logs xpc-ng-mcp-server
-# or
-podman logs xpc-ng-mcp-server
+# 2. Logs show successful startup?
+podman logs xpc-ng-mcp-server | grep "Successfully connected"
 
-# 3. Network accessible?
-curl http://localhost:3000/health
+# 3. Health endpoint responding?
+podman exec xpc-ng-mcp-server curl -s http://localhost:3000/health | jq .status
 
 # 4. Environment variables set?
-docker exec xpc-ng-mcp-server env | grep XO_
-# or
 podman exec xpc-ng-mcp-server env | grep XO_
 
-# 5. Can reach Xen Orchestra?
-docker exec xpc-ng-mcp-server ping -c 1 <XO_HOST>
-# or
-podman exec xpc-ng-mcp-server ping -c 1 <XO_HOST>
+# 5. Xen Orchestra connection verified?
+podman exec xpc-ng-mcp-server curl -s http://localhost:3000/info | jq .xo_connection
 ```
 
 ---

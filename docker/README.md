@@ -2,16 +2,33 @@
 
 Multi-runtime compatible MCP (Xen Orchestra) server container supporting Docker and Podman.
 
-## Quick Start
+**Status:** ✅ Fully tested and working with Xen Orchestra
+
+## Quick Start (5 minutes)
 
 ### 1. Setup Configuration
 
 ```bash
+cd docker
+
 # Copy environment template
 cp .env.example .env
 
 # Edit with your Xen Orchestra credentials
 nano .env
+```
+
+**Required in .env:**
+```env
+XO_HOST=10.0.4.20          # Your Xen Orchestra IP
+XO_PORT=80                 # Port (usually 80 or 443)
+XO_USER=admin@admin.net    # Your XO username
+XO_PASSWORD=admin          # Your XO password
+```
+
+Alternatively, use API token instead of password:
+```env
+XO_TOKEN=your-api-token-here
 ```
 
 ### 2. Build and Run
@@ -29,7 +46,7 @@ docker-compose up -d
 docker-compose logs -f mcp-server
 ```
 
-#### With Podman
+#### With Podman (Tested ✓)
 
 ```bash
 # Build image
@@ -42,18 +59,82 @@ podman-compose up -d
 podman-compose logs -f mcp-server
 ```
 
-### 3. Verify
+### 3. Verify It's Working
 
 ```bash
 # Check container status
-docker-compose ps
-# or
 podman-compose ps
 
-# Check health
-docker-compose ps | grep healthy
-# or
-podman-compose ps | grep healthy
+# Test health endpoint (from within container)
+podman exec xpc-ng-mcp-server curl -s http://localhost:3000/health | jq .
+
+# Expected response:
+# {
+#   "status": "ok",
+#   "timestamp": "2026-08-27T20:27:07.437Z",
+#   "xo_host": "10.0.4.20",
+#   "xo_port": 80
+# }
+```
+
+## API Endpoints
+
+Once running, the MCP server exposes three endpoints:
+
+### Health Check
+```bash
+curl http://localhost:3000/health
+
+# Response:
+{
+  "status": "ok",
+  "timestamp": "2026-08-27T20:27:07.437Z",
+  "xo_host": "10.0.4.20",
+  "xo_port": 80
+}
+```
+
+### Server Status
+```bash
+curl http://localhost:3000/status
+
+# Response:
+{
+  "status": "running",
+  "service": "Xen Orchestra MCP Server",
+  "version": "1.0.0",
+  "xo": {
+    "host": "10.0.4.20",
+    "port": 80,
+    "user": "admin@admin.net"
+  },
+  "timestamp": "2026-08-27T20:27:12.902Z"
+}
+```
+
+### Server Information
+```bash
+curl http://localhost:3000/info
+
+# Response:
+{
+  "name": "Xen Orchestra MCP Server",
+  "description": "Model Context Protocol server for Xen Orchestra",
+  "version": "1.0.0",
+  "author": "XPC-NG Demo",
+  "capabilities": [
+    "VM queries (read-only)",
+    "Host queries (read-only)",
+    "Storage queries (read-only)",
+    "Network queries (read-only)",
+    "Infrastructure audit"
+  ],
+  "xo_connection": {
+    "host": "10.0.4.20",
+    "port": 80,
+    "authenticated": true
+  }
+}
 ```
 
 ## Configuration
