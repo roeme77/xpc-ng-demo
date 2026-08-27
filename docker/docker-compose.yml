@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  mcp-server:
+    build:
+      context: .
+      dockerfile: mcp-server/Dockerfile
+    image: xpc-ng-demo-mcp-server:latest
+    container_name: xpc-ng-mcp-server
+
+    # Port mapping
+    ports:
+      - "3000:3000"
+
+    # Environment variables
+    environment:
+      NODE_ENV: production
+      LOG_LEVEL: info
+      MCP_SERVER_PORT: 3000
+      # Xen Orchestra credentials - set via .env file or override
+      XO_HOST: ${XO_HOST:-xen-orchestra.example.com}
+      XO_USER: ${XO_USER:-admin}
+      XO_PASSWORD: ${XO_PASSWORD:-password}
+      XO_PORT: ${XO_PORT:-443}
+
+    # Volume mounts
+    volumes:
+      # Config directory (mount .mcp.json from host if needed)
+      - ./config:/config:ro
+      # Logs directory (optional)
+      - ./logs:/app/logs
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+    # Resource limits (adjust as needed)
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # Network (bridge is default, compatible with both Docker and Podman)
+    networks:
+      - mcp-network
+
+networks:
+  mcp-network:
+    driver: bridge
